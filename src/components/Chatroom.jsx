@@ -28,8 +28,6 @@ class Chatroom extends React.Component {
                     { message: message },
                 ],
             });
-
-            console.log(this.state.messages)
         });
 
         this.timerId = setInterval(
