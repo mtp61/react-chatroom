@@ -1,6 +1,10 @@
 
 
-const ConnectionStatus = (props) => {
+type ConnectionStatusProps = {
+    connected: boolean,
+}
+
+const ConnectionStatus = (props: ConnectionStatusProps) => {
     return (
         <div className="connection-status" style={{backgroundColor: props.connected ? 'green' : 'red'}}>
             {

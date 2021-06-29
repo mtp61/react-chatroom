@@ -4,30 +4,42 @@ import '../styles/Chatroom.css';
 import ConnectionStatus from './ConnectionStatus';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
+import MessageType from '../types/MessageType';
 
-class Chatroom extends React.Component {
-    constructor(props) {
+type ChatroomState = {
+    connected: boolean,
+    messages: MessageType[],
+}
+
+class Chatroom extends React.Component<{}, ChatroomState> {
+    private socket: any;
+    private timerId: any;
+    
+    constructor(props: {}) {
         super(props);
 
         this.state = {
             connected: false,
             messages: [],
         };
-
+        
         this.sendMessage = this.sendMessage.bind(this);
+
+        this.timerId = null;
+        this.socket = null;
     }
 
     componentDidMount() {
         this.socket = io('10.0.0.210:3001');
 
-        this.socket.on('message', message => {
+        this.socket.on('message', (message: MessageType) => {
             console.log('received: ' + message);
-            this.setState({
-                messages: [
-                    ...this.state.messages, 
-                    { message: message },
-                ],
-            });
+            this.setState(prevState => ({
+                    messages: [
+                        ...prevState.messages, 
+                        message,
+                    ]
+            }));
         });
 
         this.timerId = setInterval(
@@ -35,14 +47,14 @@ class Chatroom extends React.Component {
                 connected: this.socket.connected,
             }),
             1000
-        )
+        );
     }
 
     componentWillUnmount() {
         clearInterval(this.timerId);
     }
 
-    sendMessage(message) {
+    sendMessage(message: MessageType) {
         this.socket.emit('message', message);
     }
 
@@ -54,7 +66,7 @@ class Chatroom extends React.Component {
                 <MessageInput sendMessage={this.sendMessage} />
             </div>
         );
-    }
+    };
 }
 
 export default Chatroom;

@@ -1,8 +1,13 @@
 import Message from './Message';
+import MessageType from '../types/MessageType';
 
-const MessageBox = (props) => {
+type MessageBoxProps = {
+    messages: MessageType[],
+}
+
+const MessageBox = (props: MessageBoxProps) => {
     const messages = props.messages.map((message, index) =>  
-        <Message message={message.message} key={index.toString()} />
+        <Message message={message} key={index.toString()} />
     );
 
     return (

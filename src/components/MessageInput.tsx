@@ -1,6 +1,10 @@
 import { useState, useCallback } from 'react';
 
-const MessageInput = (props) => {
+type MessageInputProps = {
+    sendMessage: Function,
+}
+
+const MessageInput = (props: MessageInputProps) => {
     const [message, setMessage] = useState('');
 
     const handleChange = useCallback((e) => {
@@ -9,7 +13,9 @@ const MessageInput = (props) => {
 
     const sendMessage = useCallback((e) => {        
         if (message.length > 0) {
-            props.sendMessage(message);
+            props.sendMessage({
+                message: message
+            });
             setMessage('');
         }
 
